@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>💖 Forgive Me?</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(145deg, #ffe6f0 0%, #ffc8d6 100%);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .page {
+            display: none;
+            width: 100%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(14px);
+            border-radius: 50px;
+            padding: 40px 25px 45px;
+            box-shadow: 0 30px 60px rgba(255, 80, 120, 0.25), 0 0 0 3px white;
+            text-align: center;
+            border: 3px solid white;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes fadePop {
+            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            color: #2d1b2e;
+            margin: 10px 0 20px;
+            font-weight: 800;
+            line-height: 1.3;
+        }
+
+        h1 span {
+            background: #ffb3c6;
+            padding: 0 15px;
+            border-radius: 80px;
+            border: 3px solid white;
+            display: inline-block;
+        }
+
+        .sub {
+            font-size: 0.95rem;
+            color: #b35a7c;
+            background: rgba(255, 255, 255, 0.6);
+            display: inline-block;
+            padding: 5px 20px;
+            border-radius: 40px;
+            font-weight: 600;
+            border: 2px solid white;
+            margin-bottom: 10px;
+        }
+
+        /* MEME BOX */
+        .meme-box {
+            background: #fff0f5;
+            border-radius: 35px;
+            padding: 14px;
+            margin: 18px 0 25px;
+            border: 3px dashed #ff8fab;
+            box-shadow: inset 0 0 30px rgba(255, 143, 171, 0.15);
+        }
+
+        .meme-box img {
+            width: 100%;
+            max-height: 250px;
+            object-fit: cover;
+            border-radius: 25px;
+            border: 4px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .meme-caption {
+            margin-top: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #590d22;
+            background: white;
+            padding: 6px 18px;
+            border-radius: 60px;
+            display: inline-block;
+            border: 2px solid #ff4d6d;
+        }
+
+        /* BUTTONS */
+        .button-zone {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            min-height: 100px;
+            margin: 20px 0 10px;
+        }
+
+        .btn {
+            padding: 18px 45px;
+            font-size: 2rem;
+            font-weight: 800;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 10px 0 rgba(0, 0, 0, 0.08), 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 4px solid white;
+            min-width: 130px;
+            letter-spacing: 1px;
+            touch-action: manipulation;
+            user-select: none;
+        }
+
+        .btn-yes {
+            background: #6bcf7f;
+            color: white;
+            text-shadow: 0 2px 0 #2a6b38;
+        }
+
+        .btn-yes:active {
+            transform: scale(0.95);
+        }
+
+        .btn-no {
+            background: #ff4d6d;
+            color: white;
+            text-shadow: 0 2px 0 #8f1a32;
+        }
+
+        .btn-no:active {
+            transform: scale(0.95);
+        }
+
+        /* VIDEO WRAPPER */
+        .video-wrapper {
+            margin-top: 20px;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 4px solid white;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+            background: #000;
+            display: none;
+        }
+
+        .video-wrapper.show {
+            display: block;
+            animation: fadePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .video-wrapper video {
+            width: 100%;
+            display: block;
+            max-height: 400px;
+        }
+
+        /* HEARTS */
+        .heart-float {
+            position: fixed;
+            pointer-events: none;
+            font-size: 2rem;
+            animation: floatUp 2.5s ease-out forwards;
+            z-index: 999;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(0.3) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(-400px) scale(1.5) rotate(25deg); }
+        }
+
+        /* FINAL MESSAGE */
+        .final-message {
+            font-size: 1.8rem;
+            margin-top: 20px;
+            color: #2d1b2e;
+            font-weight: 800;
+            background: white;
+            padding: 12px 25px;
+            border-radius: 80px;
+            display: inline-block;
+            border: 3px solid #6bcf7f;
+            animation: fadePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 500px) {
+            .page { padding: 30px 18px 35px; }
+            h1 { font-size: 1.8rem; }
+            .btn { font-size: 1.5rem; padding: 14px 30px; min-width: 100px; }
+            .button-zone { gap: 20px; }
+            .meme-box img { max-height: 200px; }
+        }
+
+        @media (max-width: 380px) {
+            .btn { font-size: 1.2rem; padding: 12px 20px; min-width: 80px; }
+            h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================ -->
+    <!-- PAGE 1: Will you forgive me?                                  -->
+    <!-- ============================================================ -->
+    <div class="page active" id="page1">
+        <div class="sub">💌 a little something</div>
+        <h1>
+            <span>Will you</span>
+            <span>forgive me?</span>
+            <span>🥺</span>
+        </h1>
+
+        <!-- Cat meme asking for forgiveness -->
+        <div class="meme-box">
+            <img id="forgiveMeme" src="https://cataas.com/cat?cute&t=say&s=forgive+me+please?&random=1" alt="Cute cat asking for forgiveness" />
+            <div class="meme-caption">😿 i'm really sorry...</div>
+        </div>
+
+        <!-- Buttons -->
+        <div class="button-zone" id="buttonZone">
+            <button class="btn btn-yes" id="yesBtn">YES 💖</button>
+            <button class="btn btn-no" id="noBtn">NO 😤</button>
+        </div>
+
+        <div id="messageArea" style="min-height: 50px; margin-top: 10px;"></div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- PAGE 2: Video + Celebration                                   -->
+    <!-- ============================================================ -->
+    <div class="page" id="page2">
+        <div class="sub">🎬 surprise!</div>
+        <h1>
+            <span>You said</span>
+            <span>YES!</span>
+            <span>🎉</span>
+        </h1>
+
+        <!-- YOUR VIDEO GOES HERE -->
+        <div class="video-wrapper" id="videoWrapper">
+                <video controls autoplay muted loop playsinline>
+                    <source src="jero-pp.mp4" type="video/mp4">
+                    Your browser doesn't support video.
+                </video>
+            <img src="https://cataas.com/cat/gif?t=gif&random=99" alt="Celebration" style="width:100%; display:block;" />
+        </div>
+
+        <div class="final-message">💖 I MISSED YOU SO MUCH 💖</div>
+
+        <p style="margin-top: 15px; color: #b35a7c; font-weight:600; background:white; padding:8px 20px; border-radius:40px; display:inline-block; border:2px solid #ff8fab;">
+            🥹 you just made my whole year
+        </p>
+    </div>
+
+    <script>
+        (function() {
+            // ---------- DOM refs ----------
+            const page1 = document.getElementById('page1');
+            const page2 = document.getElementById('page2');
+            const yesBtn = document.getElementById('yesBtn');
+            const noBtn = document.getElementById('noBtn');
+            const messageArea = document.getElementById('messageArea');
+            const forgiveMeme = document.getElementById('forgiveMeme');
+            const videoWrapper = document.getElementById('videoWrapper');
+
+            // ---------- HELPERS ----------
+            function showPage(page) {
+                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+                page.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function createHeart(x, y, emoji = '❤️') {
+                const el = document.createElement('div');
+                el.className = 'heart-float';
+                el.textContent = emoji;
+                el.style.left = (x - 20 + Math.random() * 40) + 'px';
+                el.style.top = (y - 20 + Math.random() * 40) + 'px';
+                el.style.fontSize = (1.5 + Math.random() * 2.5) + 'rem';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 2500);
+            }
+
+            function spamHearts(x, y, count = 35) {
+                const emojis = ['❤️', '💖', '💕', '✨', '🥰', '🌹', '💗'];
+                for (let i = 0; i < count; i++) {
+                    setTimeout(() => {
+                        const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+                        createHeart(x + (Math.random() - 0.5) * 100, y + (Math.random() - 0.5) * 100, emoji);
+                    }, i * 50);
+                }
+            }
+
+            function goToVideo() {
+                // Show page 2
+                showPage(page2);
+
+                // Show video after a tiny delay
+                setTimeout(() => {
+                    videoWrapper.classList.add('show');
+                    // Scroll to video on mobile
+                    setTimeout(() => {
+                        videoWrapper.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }, 300);
+                }, 400);
+
+                // Spam hearts everywhere
+                for (let i = 0; i < 5; i++) {
+                    setTimeout(() => {
+                        const x = Math.random() * window.innerWidth;
+                        const y = Math.random() * window.innerHeight;
+                        createHeart(x, y, ['❤️', '💖', '💕', '✨', '🥰', '🌹'][Math.floor(Math.random() * 6)]);
+                    }, i * 200 + 500);
+                }
+            }
+
+            // ---------- YES BUTTON ----------
+            yesBtn.addEventListener('click', function(e) {
+                const rect = yesBtn.getBoundingClientRect();
+                const x = rect.left + rect.width / 2;
+                const y = rect.top + rect.height / 2;
+
+                spamHearts(x, y, 45);
+
+                // Make YES huge
+                yesBtn.style.transform = 'scale(2.5)';
+                yesBtn.style.boxShadow = '0 0 80px #6bcf7f, 0 0 160px #6bcf7f';
+                yesBtn.style.transition = 'all 0.3s ease';
+
+                // Hide NO
+                noBtn.style.opacity = '0';
+                noBtn.style.transform = 'scale(0)';
+                noBtn.style.pointerEvents = 'none';
+
+                messageArea.innerHTML =
+                    '<div style="background:#2d1b2e;color:#ffb3c6;padding:12px 28px;border-radius:80px;font-size:1.3rem;font-weight:700;border:3px solid #6bcf7f;display:inline-block;animation:fadePop 0.5s cubic-bezier(0.34,1.56,0.64,1);">🥹 THANK YOU! 🥹</div>';
+
+                // Change meme to happy cat
+                forgiveMeme.src = 'https://cataas.com/cat?cute&t=say&s=thank+you!&random=' + Date.now();
+
+                // Go to video after 1.5s
+                setTimeout(goToVideo, 1500);
+            });
+
+            // ---------- NO BUTTON ----------
+            let noClickCount = 0;
+
+            noBtn.addEventListener('click', function(e) {
+                noClickCount++;
+
+                // Shrink NO
+                const scale = Math.max(0.1, 1 - (noClickCount * 0.08));
+                noBtn.style.transform = 'scale(' + scale + ')';
+                noBtn.style.opacity = Math.max(0.2, scale);
+
+                // Grow YES
+                const yesScale = Math.min(2.5, 1 + (noClickCount * 0.1));
+                yesBtn.style.transform = 'scale(' + yesScale + ')';
+
+                // Change meme to pleading cat
+                forgiveMeme.src = 'https://cataas.com/cat?cute&t=say&s=please?&random=' + Date.now();
+
+                // Spawn sad hearts
+                const rect = noBtn.getBoundingClientRect();
+                for (let i = 0; i < 6; i++) {
+                    setTimeout(() => {
+                        createHeart(
+                            rect.left + rect.width / 2 + (Math.random() - 0.5) * 60,
+                            rect.top + rect.height / 2 + (Math.random() - 0.5) * 60,
+                            '💔'
+                        );
+                    }, i * 60);
+                }
+
+                // Message
+                if (noClickCount < 4) {
+                    messageArea.innerHTML =
+                        '<div style="color:#b35a7c;font-weight:600;font-size:1.1rem;background:white;padding:8px 20px;border-radius:40px;display:inline-block;border:2px solid #ff8fab;animation:fadePop 0.3s cubic-bezier(0.34,1.56,0.64,1);">😤 keep clicking... i dare you</div>';
+                } else if (noClickCount < 8) {
+                    messageArea.innerHTML =
+                        '<div style="color:#b35a7c;font-weight:600;font-size:1.1rem;background:white;padding:8px 20px;border-radius:40px;display:inline-block;border:2px solid #ff8fab;animation:fadePop 0.3s cubic-bezier(0.34,1.56,0.64,1);">😂 you\'re so stubborn!</div>';
+                } else if (noClickCount < 12) {
+                    messageArea.innerHTML =
+                        '<div style="color:#b35a7c;font-weight:600;font-size:1.1rem;background:white;padding:8px 20px;border-radius:40px;display:inline-block;border:2px solid #ff8fab;animation:fadePop 0.3s cubic-bezier(0.34,1.56,0.64,1);">😭 okay okay! just click YES already!</div>';
+                }
+
+                // Auto-win if clicked too many times
+                if (noClickCount >= 15) {
+                    messageArea.innerHTML =
+                        '<div style="background:#2d1b2e;color:#ffb3c6;padding:12px 28px;border-radius:80px;font-size:1.3rem;font-weight:700;border:3px solid #6bcf7f;display:inline-block;animation:fadePop 0.5s cubic-bezier(0.34,1.56,0.64,1);">🤷‍♀️ fine! i\'ll take that as a YES!</div>';
+                    noBtn.style.opacity = '0';
+                    noBtn.style.transform = 'scale(0)';
+                    noBtn.style.pointerEvents = 'none';
+                    forgiveMeme.src = 'https://cataas.com/cat?cute&t=say&s=finally!&random=' + Date.now();
+
+                    setTimeout(goToVideo, 1500);
+                }
+            });
+
+            // ---------- INIT ----------
+            console.log('💖 Forgive Me website loaded!');
+            showPage(page1);
+
+            // Preload first meme
+            forgiveMeme.src = 'https://cataas.com/cat?cute&t=say&s=forgive+me+please?&random=1';
+        })();
+    </script>
+
+</body>
+</html>
